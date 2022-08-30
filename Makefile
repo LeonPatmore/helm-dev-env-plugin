@@ -1,5 +1,9 @@
 uninstall:
-	helm plugin uninstall cool 
+	helm plugin uninstall cool || true
 
-install:
+install: uninstall
+	echo "Ensure you are running as admin!"
 	helm plugin install .
+
+test:
+	helm cool
