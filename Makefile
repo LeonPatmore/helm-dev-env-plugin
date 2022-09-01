@@ -7,3 +7,9 @@ install: uninstall
 
 test:
 	helm cool
+
+run-go:
+	go run .\main.go
+
+build:
+	go build
