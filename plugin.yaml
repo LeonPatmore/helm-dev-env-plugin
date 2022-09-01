@@ -2,7 +2,7 @@ name: "cool"
 version: "0.0.1"
 usage: "does something cool"
 description: "does something cool"
-command: "$HELM_PLUGIN_DIR/bin/helm-plugin"
+command: "$HELM_PLUGIN_DIR/helm-plugin"
 hooks:
   install: "$HELM_PLUGIN_DIR/install-binary.sh"
   update: "$HELM_PLUGIN_DIR/install-binary.sh"
