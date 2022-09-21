@@ -1,4 +1,4 @@
-name: "cool"
+name: "olympus-dev"
 version: "0.0.1"
 usage: "does something cool"
 description: "does something cool"
@@ -7,3 +7,4 @@ hooks:
   install: "$HELM_PLUGIN_DIR/install-binary.sh"
   update: "$HELM_PLUGIN_DIR/install-binary.sh"
 useTunnel: false
+ignoreFlags: false
