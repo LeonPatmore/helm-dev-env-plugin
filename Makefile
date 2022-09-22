@@ -10,7 +10,7 @@ install: uninstall
 	echo "Ensure you are running as admin!"
 	helm plugin install .
 
-test:
+test-helm:
 	helm olympus-dev
 
 run-go:
@@ -18,3 +18,6 @@ run-go:
 
 build:
 	go build
+
+test:
+	go test
