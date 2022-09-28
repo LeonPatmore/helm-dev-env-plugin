@@ -7,8 +7,12 @@ import (
 )
 
 var org, err = getSecret("GITHUB_ORG")
-if err != nil {
-	
+
+
+func init() {
+	if err != nil {
+		panic("Error while trying to get the gtihub org")
+	}
 }
 
 func getDeploymentValuesFromRepo(repo string, client github.Client) (string, error) {
