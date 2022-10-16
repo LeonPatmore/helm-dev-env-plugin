@@ -8,6 +8,11 @@ import (
 
 var org, err = getSecret("GITHUB_ORG")
 
+type Configuration interface {
+	GetContents(ctx context.Context, owner, repo, path string, opts string) github.Client
+}
+
+type GithubConfiguration struct
 
 func init() {
 	if err != nil {
