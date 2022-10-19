@@ -18,8 +18,8 @@ func (r MockConfiguration) GetOrg() string {
 	return "myOrg"
 }
  
-func TestGetDeploymentValuesFromRepo(t *testing.T) {
-	values, err := getDeploymentValuesFromRepo("repo", MockConfiguration{})
+func TestGetDeploymentValuesDownloadUrl(t *testing.T) {
+	values, err := GetDeploymentValuesDownloadUrl("repo", MockConfiguration{})
 	assert.Equal(t, err, nil)
 	assert.Equal(t, values, "someCoolValues")
 }
