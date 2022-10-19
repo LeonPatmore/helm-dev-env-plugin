@@ -8,5 +8,6 @@ import (
 
 type Configuration interface {
 	GetContents(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error)
+	GetDownloadUrl(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error)
 	GetOrg() string
 }

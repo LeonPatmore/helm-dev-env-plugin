@@ -13,5 +13,5 @@ func (r GithubConfiguration) GetOrg() string {
 
 func GetDeploymentValuesDownloadUrl(repo string, configuration Configuration) (string, error) {
 	ctx := context.Background()
-	return configuration.GetContents(ctx, configuration.GetOrg(), repo, "deployment.yaml", &github.RepositoryContentGetOptions{Ref: "OTT-XXX/Fix-Values"})
+	return configuration.GetDownloadUrl(ctx, configuration.GetOrg(), repo, "deployment.yaml", &github.RepositoryContentGetOptions{Ref: "OTT-XXX/Fix-Values"})
 }
