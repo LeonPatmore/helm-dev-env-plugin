@@ -6,14 +6,14 @@ import (
 	"github.com/google/go-github/v47/github"
 )
 
-var org, err = getSecret("GITHUB_ORG")
-
 type Configuration interface {
 	GetContents(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error)
+	GetOrg() string
 }
 
 type GithubConfiguration struct {
 	client github.Client
+	githubOrg string
 }
 
 func (r GithubConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error) {
@@ -24,13 +24,11 @@ func (r GithubConfiguration) GetContents(ctx context.Context, owner string, repo
 	return fileContent.GetDownloadURL(), nil
 }
 
-func init() {
-	if err != nil {
-		panic("Error while trying to get the github org")
-	}
+func (r GithubConfiguration) GetOrg() string {
+	return r.githubOrg 
 }
 
 func getDeploymentValuesFromRepo(repo string, configuration Configuration) (string, error) {
 	ctx := context.Background()
-	return configuration.GetContents(ctx, org, repo, "deployment.yaml", &github.RepositoryContentGetOptions{Ref: "OTT-XXX/Fix-Values"})
+	return configuration.GetContents(ctx, configuration.GetOrg(), repo, "deployment.yaml", &github.RepositoryContentGetOptions{Ref: "OTT-XXX/Fix-Values"})
 }
