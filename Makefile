@@ -20,4 +20,7 @@ build:
 	go build
 
 test:
-	go test -v
+	go test -v -coverprofile cover.out
+
+coverage:
+	go tool cover -html cover.out
