@@ -9,17 +9,17 @@ import (
 )
 
 type CIConfig struct {
-	version   string `yaml:"version,omitempty"`
-	namespace string
-	chart     struct {
-		name    string "olympus-service"
-		version string
+	Version   string
+	Namespace string
+	Chart     struct {
+		Name    string
+		Version string
 	}
 }
 
 func GetCiYaml(repo string, configuration Configuration) (*CIConfig, error) {
 	ctx := context.Background()
-	fileContent, err := configuration.GetContents(ctx, "nexmoinc", repo, "ci.yaml", &github.RepositoryContentGetOptions{Ref: "master"})
+	fileContent, err := configuration.GetContents(ctx, configuration.GetOrg(), repo, "ci.yaml", &github.RepositoryContentGetOptions{Ref: "master"})
 	if err != nil {
 		return nil, err
 	}
@@ -29,8 +29,8 @@ func GetCiYaml(repo string, configuration Configuration) (*CIConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(config.version)
-	fmt.Println(config.namespace)
-	fmt.Println(config.chart.name)
+	if config.Chart.Name == "" {
+		config.Chart.Name = configuration.GetDefaultChatName()
+	}
 	return &config, nil
 }

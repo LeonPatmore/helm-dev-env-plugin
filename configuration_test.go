@@ -7,7 +7,7 @@ import (
 )
 
 type MockConfiguration struct {
-	getContentsRes string "someCoolValues"
+	getContentsRes string
 	getContentsErr error
 }
 
@@ -22,4 +22,8 @@ func (r MockConfiguration) GetDownloadUrl(ctx context.Context, owner string, rep
 
 func (r MockConfiguration) GetOrg() string {
 	return "myOrg"
+}
+
+func (r MockConfiguration) GetDefaultChatName() string {
+	return "myChartName"
 }
