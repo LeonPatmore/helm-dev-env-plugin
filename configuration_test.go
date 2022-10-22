@@ -27,3 +27,7 @@ func (r MockConfiguration) GetOrg() string {
 func (r MockConfiguration) GetDefaultChatName() string {
 	return "myChartName"
 }
+
+func (r MockConfiguration) GetDevRepos(devEnv string) ([]string, error) {
+	return []string{"repo1", "repo2"}, nil
+}

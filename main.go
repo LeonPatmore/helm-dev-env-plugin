@@ -20,46 +20,8 @@ package main
 // var namespace string
 // var tags []string
 
-// type CIConfig struct {
-// 	version   string
-// 	namespace string
-// 	chart     struct {
-// 		name    string "olympus-service"
-// 		version string
-// 	}
-// }
-
 // type DevConfig struct {
 // 	namespace string
-// }
-
-// func getGithubClient() github.Client {
-// 	ctx := context.Background()
-// 	ts := oauth2.StaticTokenSource(
-// 		&oauth2.Token{AccessToken: "token"},
-// 	)
-// 	tc := oauth2.NewClient(ctx, ts)
-
-// 	client := github.NewClient(tc)
-// 	return *client
-// }
-
-// func getReposForDevEnv(devEnv string, client github.Client) []string {
-// 	ctx := context.Background()
-// 	res, _, err := client.Search.Repositories(ctx, fmt.Sprintf("topic:%s org:nexmoinc", devEnv), &github.SearchOptions{})
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		os.Exit(1)
-// 	}
-// 	fmt.Printf("Found %d repos for this dev env: ", *res.Total)
-
-// 	var repos []string
-// 	for _, x := range res.Repositories {
-// 		repos = append(repos, *x.Name)
-// 	}
-
-// 	fmt.Println(repos)
-// 	return repos
 // }
 
 // func installService(chartName string, releaseName string, namespace string, imageTag string, opts *values.Options) error {
