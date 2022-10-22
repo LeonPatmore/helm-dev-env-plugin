@@ -6,10 +6,14 @@ import (
 	"github.com/google/go-github/v47/github"
 )
 
-type MockConfiguration struct {}
+type MockConfiguration struct {
+	getContentsRes string "someCoolValues"
+	getContentsErr error
+}
+
 
 func (r MockConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error) {
-	return "someCoolValues",  nil
+	return r.getContentsRes, r.getContentsErr
 }
 
 func (r MockConfiguration) GetDownloadUrl(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error) {

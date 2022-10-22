@@ -9,7 +9,7 @@ import (
 )
 
 type CIConfig struct {
-	version   string
+	version   string `yaml:"version,omitempty"`
 	namespace string
 	chart     struct {
 		name    string "olympus-service"
@@ -24,10 +24,13 @@ func GetCiYaml(repo string, configuration Configuration) (*CIConfig, error) {
 		return nil, err
 	}
 	fmt.Println(fileContent)
-	config := &CIConfig{}
-	err = yaml.Unmarshal([]byte(fileContent), config)
+	config := CIConfig{}
+	err = yaml.Unmarshal([]byte(fileContent), &config)
 	if err != nil {
 		return nil, err
 	}
-	return config, nil
+	fmt.Println(config.version)
+	fmt.Println(config.namespace)
+	fmt.Println(config.chart.name)
+	return &config, nil
 }
