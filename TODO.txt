@@ -1,2 +1,2 @@
 - Find a go linter.
-- Add CI.
+- Add CI. DONE

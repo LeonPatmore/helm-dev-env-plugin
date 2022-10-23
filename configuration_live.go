@@ -4,8 +4,13 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/google/go-github/v47/github"
 	"golang.org/x/oauth2"
+	"helm.sh/helm/v3/pkg/action"
+	"helm.sh/helm/v3/pkg/chart"
+	"helm.sh/helm/v3/pkg/chart/loader"
+	"helm.sh/helm/v3/pkg/cli"
 )
 
 func getGithubClient() github.Client {
@@ -19,12 +24,13 @@ func getGithubClient() github.Client {
 	return *client
 }
 
-type GithubConfiguration struct {
+type LiveConfiguration struct {
 	client github.Client
 	githubOrg string
+
 }
 
-func (r GithubConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error) {
+func (r LiveConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error) {
 	fileContent, _, _, err := r.client.Repositories.GetContents(ctx, owner, repo, path, opts)
 	if err != nil {
 		return "", err
@@ -32,7 +38,7 @@ func (r GithubConfiguration) GetContents(ctx context.Context, owner string, repo
 	return fileContent.GetDownloadURL(), nil
 }
 
-func (r GithubConfiguration) GetDevRepos(devEnv string) ([]string, error) {
+func (r LiveConfiguration) GetDevRepos(devEnv string) ([]string, error) {
 	ctx := context.Background()
 	res, _, err := r.client.Search.Repositories(ctx, fmt.Sprintf("topic:%s org:%s", devEnv, r.GetOrg()), &github.SearchOptions{})
 	if err != nil {
@@ -48,4 +54,24 @@ func (r GithubConfiguration) GetDevRepos(devEnv string) ([]string, error) {
 
 	fmt.Println(repos)
 	return repos, nil
+}
+
+func (r LiveConfiguration) GetRegion() (string, error) {
+	session, err := session.NewSession()
+	if err != nil{
+		return "", err
+	}
+	return *session.Config.Region, nil
+}
+
+func (r LiveConfiguration) LocateChart(name string, client *action.Install) (string, error) {
+	return client.LocateChart(name, cli.New())
+}
+
+func (r LiveConfiguration) LoadChart(location string) (*chart.Chart, error) {
+	return loader.Load(location)
+}
+
+func (r LiveConfiguration) GetOrg() string {
+	return r.githubOrg 
 }
