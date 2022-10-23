@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"testing"
 
 	"github.com/google/go-github/v47/github"
 	"helm.sh/helm/v3/pkg/action"
@@ -12,6 +13,8 @@ type MockConfiguration struct {
 	getContentsRes string
 	getContentsErr error
 	locateChartErr error
+	getDefaultImageRepoErr error
+	t *testing.T
 }
 
 
@@ -45,4 +48,12 @@ func (r MockConfiguration) LocateChart(name string, client *action.Install) (str
 
 func (r MockConfiguration) LoadChart(location string) (*chart.Chart, error) {
 	return &chart.Chart{}, nil
+}
+
+func (r MockConfiguration) GetDefaultImageRepo(repo string, ciConfig CIConfig) (string, error) {
+	return "cool-repo-" + repo + "-" + ciConfig.Namespace, r.getDefaultImageRepoErr
+}
+
+func (r MockConfiguration) ActionConfiguration() *action.Configuration {
+	return ActionConfigFixture(r.t)
 }

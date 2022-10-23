@@ -13,8 +13,10 @@ type Configuration interface {
 	GetDownloadUrl(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error)
 	GetOrg() string
 	GetDefaultChatName() string
+	GetDefaultImageRepo(repo string, ciConfig CIConfig) (string, error)
 	GetDevRepos(devEnv string) ([]string, error)
 	GetRegion() (string, error)
 	LocateChart(name string, client *action.Install) (string, error)
 	LoadChart(location string) (*chart.Chart, error)
+	ActionConfiguration() *action.Configuration
 }

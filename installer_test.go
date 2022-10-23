@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"helm.sh/helm/v3/pkg/action"
 	"helm.sh/helm/v3/pkg/chartutil"
+	"helm.sh/helm/v3/pkg/cli/values"
 	kubefake "helm.sh/helm/v3/pkg/kube/fake"
 	"helm.sh/helm/v3/pkg/registry"
 	"helm.sh/helm/v3/pkg/storage"
@@ -31,14 +32,31 @@ func ActionConfigFixture(t *testing.T) *action.Configuration {
 	}
 }
 
-func TestLoadChartFromLocation(t *testing.T) {
+func TestLoadChart(t *testing.T) {
 	installAction := action.NewInstall(ActionConfigFixture(t))
-	_, err := LoadChartFromLocation("chart", installAction, MockConfiguration{})
+	_, err := LoadChart("chart", installAction, MockConfiguration{})
 	assert.Equal(t, err, nil)
 }
 
-func TestLoadChartFromLocationWhenLocateChartError(t *testing.T) {
+func TestLoadChartWhenLocateChartError(t *testing.T) {
 	installAction := action.NewInstall(ActionConfigFixture(t))
-	_, err := LoadChartFromLocation("chart", installAction, MockConfiguration{locateChartErr: errors.New("Some big error")})
+	_, err := LoadChart("chart", installAction, MockConfiguration{locateChartErr: errors.New("Some big error")})
 	assert.NotNil(t, err)
+}
+
+func TestWithDefaultValues(t *testing.T) {
+	options := LocalOptions{&values.Options{}}
+	options.WithDefaultValues("some-tag", "release-name", CIConfig{ImageRepo: "some-repo"}, MockConfiguration{})
+	assert.ElementsMatch(t, []string{
+		"awsRegion=eu-west-1", 
+		"global.awsRegion=eu-west-1", 
+		"image.tag=some-tag", 
+		"global.image.tag=some-tag", 
+		"imageRepo=some-repo",
+		}, options.Values)
+}
+
+func TestInstallService(t *testing.T) {
+	err := InstallService("myChart", "release",  "myNamespace", "myTag", &values.Options{}, CIConfig{}, MockConfiguration{t: t})
+	assert.Equal(t, nil, err)
 }

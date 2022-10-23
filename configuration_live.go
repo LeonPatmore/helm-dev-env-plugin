@@ -75,3 +75,7 @@ func (r LiveConfiguration) LoadChart(location string) (*chart.Chart, error) {
 func (r LiveConfiguration) GetOrg() string {
 	return r.githubOrg 
 }
+
+func (r LiveConfiguration) GetDefaultImageRepo(repo string, ciConfig CIConfig) (string, error) {
+	return getSecret("default-image-repo")
+}
