@@ -7,6 +7,7 @@ import (
 	"github.com/google/go-github/v47/github"
 	"helm.sh/helm/v3/pkg/action"
 	"helm.sh/helm/v3/pkg/chart"
+	"helm.sh/helm/v3/pkg/release"
 )
 
 type MockConfiguration struct {
@@ -14,6 +15,7 @@ type MockConfiguration struct {
 	getContentsErr error
 	locateChartErr error
 	getDefaultImageRepoErr error
+	installErr error
 	t *testing.T
 }
 
@@ -56,4 +58,8 @@ func (r MockConfiguration) GetDefaultImageRepo(repo string, ciConfig CIConfig) (
 
 func (r MockConfiguration) ActionConfiguration() *action.Configuration {
 	return ActionConfigFixture(r.t)
+}
+
+func (r MockConfiguration) Install(install *action.Install, chrt *chart.Chart, vals map[string]interface{}) (*release.Release, error) {
+	return &release.Release{Namespace: "namespace"}, r.installErr
 }

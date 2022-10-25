@@ -6,6 +6,7 @@ import (
 	"github.com/google/go-github/v47/github"
 	"helm.sh/helm/v3/pkg/action"
 	"helm.sh/helm/v3/pkg/chart"
+	"helm.sh/helm/v3/pkg/release"
 )
 
 type Configuration interface {
@@ -19,4 +20,5 @@ type Configuration interface {
 	LocateChart(name string, client *action.Install) (string, error)
 	LoadChart(location string) (*chart.Chart, error)
 	ActionConfiguration() *action.Configuration
+	Install(install *action.Install, chrt *chart.Chart, vals map[string]interface{}) (*release.Release, error)
 }

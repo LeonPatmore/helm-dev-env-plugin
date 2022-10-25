@@ -60,3 +60,8 @@ func TestInstallService(t *testing.T) {
 	err := InstallService("myChart", "release",  "myNamespace", "myTag", &values.Options{}, CIConfig{}, MockConfiguration{t: t})
 	assert.Equal(t, nil, err)
 }
+
+func TestInstallServiceInstallErr(t *testing.T) {
+	err := InstallService("myChart", "release",  "myNamespace", "myTag", &values.Options{}, CIConfig{}, MockConfiguration{t: t, installErr: errors.New("some error")})
+	assert.NotNil(t, err)
+}

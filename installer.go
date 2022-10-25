@@ -67,11 +67,10 @@ func InstallService(chartName string, releaseName string, namespace string, imag
 		return err
 	}
 
-	rel, err := client.Run(chart, optsAsMap)
+	rel, err := configuration.Install(client, chart, optsAsMap)
 	if err != nil {
 		return err
 	}
 	log.Printf("Installed Chart from path: %s in namespace: %s\n", rel.Name, rel.Namespace)
-	log.Println(rel.Config)
 	return nil
 }
