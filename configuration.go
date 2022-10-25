@@ -13,7 +13,7 @@ type Configuration interface {
 	GetContents(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error)
 	GetDownloadUrl(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error)
 	GetOrg() string
-	GetDefaultChatName() string
+	GetDefaultChatName() (string, error)
 	GetDefaultImageRepo(repo string, ciConfig CIConfig) (string, error)
 	GetDevRepos(devEnv string) ([]string, error)
 	GetRegion() (string, error)
@@ -21,4 +21,5 @@ type Configuration interface {
 	LoadChart(location string) (*chart.Chart, error)
 	ActionConfiguration() *action.Configuration
 	Install(install *action.Install, chrt *chart.Chart, vals map[string]interface{}) (*release.Release, error)
+	SearchRepos(devEnv string) (*github.RepositoriesSearchResult, *github.Response, error)
 }

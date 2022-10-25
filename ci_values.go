@@ -31,7 +31,11 @@ func GetCiYaml(repo string, configuration Configuration) (*CIConfig, error) {
 		return nil, err
 	}
 	if config.Chart.Name == "" {
-		config.Chart.Name = configuration.GetDefaultChatName()
+		defaultChartName, err := configuration.GetDefaultChatName()
+		if err != nil {
+			return nil, err
+		}
+		config.Chart.Name = defaultChartName
 	}
 	if config.ImageRepo == "" {
 		imageRepo, err := configuration.GetDefaultImageRepo(repo, config)

@@ -1,140 +1,40 @@
 package main
 
-// import (
-// 	"context"
-// 	"fmt"
-// 	"log"
-// 	"os"
-// 	"strings"
+import (
+	"fmt"
+	"os"
 
-// 	"github.com/google/go-github/v47/github"
-// 	"github.com/spf13/cobra"
-// 	"golang.org/x/oauth2"
-// 	"helm.sh/helm/v3/pkg/action"
-// 	"helm.sh/helm/v3/pkg/chart/loader"
-// 	"helm.sh/helm/v3/pkg/cli"
-// 	"helm.sh/helm/v3/pkg/cli/values"
-// 	"helm.sh/helm/v3/pkg/getter"
-// )
+	"github.com/spf13/cobra"
+)
 
-// var namespace string
-// var tags []string
+var namespace string
+var devEnv string
+var tags []string
 
-// type DevConfig struct {
-// 	namespace string
-// }
+func main() {
+	org, err := getSecret("org")
+	githubClient := GetGithubClient()
+	if err != nil {
+		os.Exit(1)
+	}
+	config := LiveConfiguration{Client: githubClient, GithubOrg: org}
+	var rootCmd = &cobra.Command{
+		Use:   "helm dev",
+		Short: "For creating a dev env",
+		Run: func(cmd *cobra.Command, args []string) {
+			RunDevInstall(devEnv, namespace, tags, config)
+		},
+	}
+	rootCmd.Flags().StringVarP(&namespace, "devname", "d", "", "Namespace for the dev env")
+	rootCmd.MarkFlagRequired("devname")
 
-// func installService(chartName string, releaseName string, namespace string, imageTag string, opts *values.Options) error {
-// 	actionConfig := new(action.Configuration)
-// 	settings := cli.New()
-// 	client := action.NewInstall(actionConfig)
+	rootCmd.Flags().StringVarP(&devEnv, "type", "t", "", "Type fo the dev env")
+	rootCmd.MarkFlagRequired("type")
 
-// 	ecrRepo := fmt.Sprintf("nexmo-%s", releaseName)
-// 	extraValues := []string{"awsRegion=eu-west-1",
-// 		"global.awsRegion=eu-west-1",
-// 		fmt.Sprintf("image.tag=%s", imageTag),
-// 		fmt.Sprintf("global.image.tag=%s", imageTag),
-// 		fmt.Sprintf("ecrRepoName=%s", ecrRepo)}
-// 	opts.Values = extraValues
+	rootCmd.Flags().StringArrayVarP(&tags, "tag", "t", []string{}, "Tags for the services you want to install on a branch")
 
-// 	chartLocation, err := client.LocateChart(fmt.Sprintf("%s/%s", chartName, chartName), settings)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	if err := actionConfig.Init(settings.RESTClientGetter(), namespace,
-// 		os.Getenv("HELM_DRIVER"), log.Printf); err != nil {
-// 		log.Printf("%+v", err)
-// 		os.Exit(1)
-// 	}
-// 	chart, err := loader.Load(chartLocation)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	client.Namespace = namespace
-// 	client.CreateNamespace = true
-// 	client.ReleaseName = releaseName
-// 	client.IsUpgrade = true
-
-// 	// install the chart here
-// 	p := getter.All(settings)
-// 	optsAsMap, err := opts.MergeValues(p)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	rel, err := client.Run(chart, optsAsMap)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	log.Printf("Installed Chart from path: %s in namespace: %s\n", rel.Name, rel.Namespace)
-// 	// this will confirm the values set during installation
-// 	log.Println(rel.Config)
-// 	return nil
-// }
-
-// func runDevInstall(namespace string) {
-// 	fmt.Println("Hello, World!")
-
-// 	fmt.Printf("namespace is %s\n", namespace)
-
-// 	tagMap := make(map[string]string)
-// 	for _, tagString := range tags {
-// 		tagSplit := strings.Split(tagString, "=")
-// 		fmt.Printf("Setting service %s to version %s", tagSplit[0], tagSplit[1])
-// 		tagMap[tagSplit[0]] = tagSplit[1]
-// 	}
-
-// 	githubClient := getGithubClient()
-// 	repos := getReposForDevEnv("messages", githubClient)
-// 	for _, repo := range repos {
-// 		ciConfig, err := getCiYaml(repo, githubClient)
-// 		if err != nil {
-// 			os.Exit(1)
-// 		}
-// 		var chartName string
-// 		if len(ciConfig.chart.name) > 0 {
-// 			chartName = ciConfig.chart.name
-// 		} else {
-// 			chartName = "olympus-service"
-// 		}
-// 		valueFileUrl, err := getDeploymentValueFileUrl(repo, githubClient)
-// 		if err != nil {
-// 			fmt.Println(err)
-// 			os.Exit(1)
-// 		}
-// 		opts := values.Options{ValueFiles: []string{valueFileUrl,
-// 			"value files"}}
-
-// 		var imageTag string
-// 		if val, ok := tagMap[repo]; ok {
-// 			imageTag = val
-// 		} else {
-// 			imageTag = "latest"
-// 		}
-// 		errr := installService(chartName, repo, namespace, imageTag, &opts)
-// 		if errr != nil {
-// 			fmt.Println(errr)
-// 			os.Exit(1)
-// 		}
-// 	}
-// }
-
-// func main() {
-// 	var rootCmd = &cobra.Command{
-// 		Use:   "helm olympus-dev",
-// 		Short: "For creating a dev env",
-// 		Run: func(cmd *cobra.Command, args []string) {
-// 			runDevInstall(namespace)
-// 		},
-// 	}
-// 	rootCmd.Flags().StringVarP(&namespace, "devname", "d", "", "Namespace for the dev env")
-// 	rootCmd.MarkFlagRequired("devname")
-
-// 	rootCmd.Flags().StringArrayVarP(&tags, "tag", "t", []string{}, "Tags for the services you want to install on a branch")
-
-// 	if err := rootCmd.Execute(); err != nil {
-// 		fmt.Fprintln(os.Stderr, err)
-// 		os.Exit(1)
-// 	}
-// }
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}

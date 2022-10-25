@@ -32,8 +32,8 @@ func (r MockConfiguration) GetOrg() string {
 	return "myOrg"
 }
 
-func (r MockConfiguration) GetDefaultChatName() string {
-	return "myChartName"
+func (r MockConfiguration) GetDefaultChatName() (string, error) {
+	return "myChartName", nil
 }
 
 func (r MockConfiguration) GetDevRepos(devEnv string) ([]string, error) {
@@ -62,4 +62,8 @@ func (r MockConfiguration) ActionConfiguration() *action.Configuration {
 
 func (r MockConfiguration) Install(install *action.Install, chrt *chart.Chart, vals map[string]interface{}) (*release.Release, error) {
 	return &release.Release{Namespace: "namespace"}, r.installErr
+}
+
+func (r MockConfiguration) SearchRepos(devEnv string) (*github.RepositoriesSearchResult, *github.Response, error) {
+	return &github.RepositoriesSearchResult{}, &github.Response{}, nil
 }

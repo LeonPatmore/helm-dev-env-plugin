@@ -14,7 +14,7 @@ import (
 	"helm.sh/helm/v3/pkg/release"
 )
 
-func getGithubClient() github.Client {
+func GetGithubClient() github.Client {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: "token"},
@@ -26,22 +26,21 @@ func getGithubClient() github.Client {
 }
 
 type LiveConfiguration struct {
-	client github.Client
-	githubOrg string
-
+	Client github.Client
+	GithubOrg string
 }
 
 func (r LiveConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error) {
-	fileContent, _, _, err := r.client.Repositories.GetContents(ctx, owner, repo, path, opts)
+	fileContent, _, _, err := r.Client.Repositories.GetContents(ctx, owner, repo, path, opts)
 	if err != nil {
 		return "", err
 	}
-	return fileContent.GetDownloadURL(), nil
+	return fileContent.GetContent()
 }
 
 func (r LiveConfiguration) GetDevRepos(devEnv string) ([]string, error) {
 	ctx := context.Background()
-	res, _, err := r.client.Search.Repositories(ctx, fmt.Sprintf("topic:%s org:%s", devEnv, r.GetOrg()), &github.SearchOptions{})
+	res, _, err := r.Client.Search.Repositories(ctx, fmt.Sprintf("topic:%s org:%s", devEnv, r.GetOrg()), &github.SearchOptions{})
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -74,7 +73,7 @@ func (r LiveConfiguration) LoadChart(location string) (*chart.Chart, error) {
 }
 
 func (r LiveConfiguration) GetOrg() string {
-	return r.githubOrg 
+	return r.GithubOrg 
 }
 
 func (r LiveConfiguration) GetDefaultImageRepo(repo string, ciConfig CIConfig) (string, error) {
@@ -83,4 +82,25 @@ func (r LiveConfiguration) GetDefaultImageRepo(repo string, ciConfig CIConfig) (
 
 func (r LiveConfiguration) Install(install *action.Install, chrt *chart.Chart, vals map[string]interface{}) (*release.Release, error) {
 	return install.Run(chrt, vals)
+}
+
+func (r LiveConfiguration) ActionConfiguration() *action.Configuration {
+	return new(action.Configuration)
+}
+
+func (r LiveConfiguration) SearchRepos(devEnv string) (*github.RepositoriesSearchResult, *github.Response, error) {
+	ctx := context.Background()
+	return r.Client.Search.Repositories(ctx, fmt.Sprintf("topic:%s org:%s", devEnv, r.GithubOrg), &github.SearchOptions{})
+}
+
+func (r LiveConfiguration) GetDefaultChatName() (string, error) {
+	return getSecret("default-chart-name")
+}
+
+func (r LiveConfiguration) GetDownloadUrl(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error) {
+	fileContent, _, _, err := r.Client.Repositories.GetContents(ctx, owner, repo, path, opts)
+	if err != nil {
+		return "", err
+	}
+	return fileContent.GetDownloadURL(), nil
 }
