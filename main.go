@@ -15,6 +15,7 @@ func main() {
 	org, err := getSecret("org")
 	githubClient := GetGithubClient()
 	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 	config := LiveConfiguration{Client: githubClient, GithubOrg: org}

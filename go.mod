@@ -2,7 +2,16 @@ module helm-plugin
 
 go 1.19
 
-require github.com/chartmuseum/helm-push v0.10.3
+require (
+	github.com/aws/aws-sdk-go v1.19.23
+	github.com/aws/aws-secretsmanager-caching-go v1.1.0
+	github.com/chartmuseum/helm-push v0.10.3
+	github.com/google/go-github/v47 v47.0.0
+	github.com/spf13/cobra v1.5.0
+	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
+	gopkg.in/yaml.v2 v2.4.0
+	helm.sh/helm/v3 v3.9.4
+)
 
 require (
 	github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1 // indirect
@@ -15,8 +24,6 @@ require (
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200428143746-21a406dcc535 // indirect
-	github.com/aws/aws-sdk-go v1.19.23 // indirect
-	github.com/aws/aws-secretsmanager-caching-go v1.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/chai2010/gettext-go v0.0.0-20160711120539-c6fed771bfd5 // indirect
@@ -47,7 +54,6 @@ require (
 	github.com/google/btree v1.0.1 // indirect
 	github.com/google/gnostic v0.5.7-v3refs // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
-	github.com/google/go-github/v47 v47.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
@@ -97,7 +103,6 @@ require (
 	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
-	github.com/spf13/cobra v1.5.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/testify v1.8.0 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f // indirect
@@ -107,7 +112,6 @@ require (
 	go.starlark.net v0.0.0-20200306205701-8dd3e2ee1dd5 // indirect
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
-	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8 // indirect
 	golang.org/x/sync v0.0.0-20220601150217-0de741cfad7f // indirect
 	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
@@ -118,9 +122,7 @@ require (
 	google.golang.org/grpc v1.43.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	helm.sh/helm/v3 v3.9.4 // indirect
 	k8s.io/api v0.24.2 // indirect
 	k8s.io/apiextensions-apiserver v0.24.2 // indirect
 	k8s.io/apimachinery v0.24.2 // indirect
