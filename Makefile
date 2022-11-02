@@ -9,7 +9,7 @@ install: uninstall
 	helm plugin install .
 
 test-helm:
-	helm dev
+	export AWS_REGION="eu-west-1" && helm dev
 
 run-go:
 	go run .
