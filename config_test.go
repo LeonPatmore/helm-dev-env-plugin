@@ -23,3 +23,12 @@ func TestGetSecret_usesEnvVar(t *testing.T) {
         t.Fatal(err)
     }
 }
+
+func TestGetSecret_capitalisesForEnvVar(t *testing.T) {
+    os.Setenv("SOME_EXAMPLE", "val")
+    val, err := getSecret("some_example")
+    assert.Equal(t, "val", val)
+    if err != nil {
+        t.Fatal(err)
+    }
+}

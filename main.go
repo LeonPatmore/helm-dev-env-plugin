@@ -32,7 +32,7 @@ func main() {
 	rootCmd.Flags().StringVarP(&devEnv, "type", "t", "", "Type fo the dev env")
 	rootCmd.MarkFlagRequired("type")
 
-	rootCmd.Flags().StringArrayVarP(&tags, "tag", "t", []string{}, "Tags for the services you want to install on a branch")
+	rootCmd.Flags().StringArrayVar(&tags, "tag", []string{}, "Tags for the services you want to install on a branch")
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
