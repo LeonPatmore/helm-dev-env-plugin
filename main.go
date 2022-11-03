@@ -23,7 +23,11 @@ func main() {
 		Use:   "helm dev",
 		Short: "For creating a dev env",
 		Run: func(cmd *cobra.Command, args []string) {
-			RunDevInstall(devEnv, namespace, tags, config)
+			err := RunDevInstall(devEnv, namespace, tags, config)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err)
+				os.Exit(1)
+			}
 		},
 	}
 	rootCmd.Flags().StringVarP(&namespace, "devname", "d", "", "Namespace for the dev env")
