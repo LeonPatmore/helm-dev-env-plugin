@@ -14,15 +14,19 @@ import (
 	"helm.sh/helm/v3/pkg/release"
 )
 
-func GetGithubClient() github.Client {
+func GetGithubClient() (*github.Client, error) {
 	ctx := context.Background()
+	token, err := getSecret("github_token")
+	if err != nil {
+		return nil, err
+	}
 	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: "token"},
+		&oauth2.Token{AccessToken: token},
 	)
 	tc := oauth2.NewClient(ctx, ts)
 
 	client := github.NewClient(tc)
-	return *client
+	return client, nil
 }
 
 type LiveConfiguration struct {

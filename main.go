@@ -13,12 +13,16 @@ var tags []string
 
 func main() {
 	org, err := getSecret("org")
-	githubClient := GetGithubClient()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	config := LiveConfiguration{Client: githubClient, GithubOrg: org}
+	githubClient, err := GetGithubClient()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	config := LiveConfiguration{Client: *githubClient, GithubOrg: org}
 	var rootCmd = &cobra.Command{
 		Use:   "helm dev",
 		Short: "For creating a dev env",
