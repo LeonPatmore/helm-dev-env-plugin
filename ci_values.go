@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/google/go-github/v47/github"
 	"gopkg.in/yaml.v2"
 )
 
@@ -20,13 +19,13 @@ type CIConfig struct {
 
 func GetCiYaml(repo string, configuration Configuration) (*CIConfig, error) {
 	ctx := context.Background()
-	fileContent, err := configuration.GetContents(ctx, configuration.GetOrg(), repo, "ci.yaml", &github.RepositoryContentGetOptions{Ref: "master"})
+	fileContent, err := configuration.GetContents(ctx, configuration.GetOrg(), repo, "ci.yaml", nil)
 	if err != nil {
 		return nil, err
 	}
 	fmt.Println(fileContent)
 	config := CIConfig{}
-	err = yaml.Unmarshal([]byte(fileContent), &config)
+	err = yaml.Unmarshal([]byte(*fileContent), &config)
 	if err != nil {
 		return nil, err
 	}

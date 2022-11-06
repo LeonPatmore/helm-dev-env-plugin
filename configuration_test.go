@@ -20,12 +20,13 @@ type MockConfiguration struct {
 }
 
 
-func (r MockConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error) {
-	return r.getContentsRes, r.getContentsErr
+func (r MockConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
+	return &r.getContentsRes, r.getContentsErr
 }
 
-func (r MockConfiguration) GetDownloadUrl(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error) {
-	return "some-url", nil
+func (r MockConfiguration) GetDownloadUrl(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
+	url := "some-url"
+	return &url, nil
 }
 
 func (r MockConfiguration) GetOrg() string {
@@ -66,4 +67,8 @@ func (r MockConfiguration) Install(install *action.Install, chrt *chart.Chart, v
 
 func (r MockConfiguration) SearchRepos(devEnv string) (*github.RepositoriesSearchResult, *github.Response, error) {
 	return &github.RepositoriesSearchResult{}, &github.Response{}, nil
+}
+
+func (r MockConfiguration) GetDefaultBranch(repo string) (string, error) {
+	return "main", nil
 }

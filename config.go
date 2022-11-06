@@ -16,5 +16,8 @@ func getSecret(id string) (string, error) {
 		return env, nil
 	}
 	res, err := secretCache.GetSecretString(fmt.Sprintf("%s/%s", secretPrefix, id))
+	if err != nil{
+		fmt.Printf("Failed to get AWS secret with id %s\n",id)
+	}
 	return res, err
 }

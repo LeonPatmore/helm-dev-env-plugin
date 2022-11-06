@@ -34,12 +34,21 @@ type LiveConfiguration struct {
 	GithubOrg string
 }
 
-func (r LiveConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error) {
-	fileContent, _, _, err := r.Client.Repositories.GetContents(ctx, owner, repo, path, opts)
-	if err != nil {
-		return "", err
+func (r LiveConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
+	var refAfterDefault *string = ref
+	if ref == nil {
+		defaultBranch, err := r.GetDefaultBranch(repo)
+		if err != nil {
+			return nil, err
+		}
+		refAfterDefault = &defaultBranch
 	}
-	return fileContent.GetContent()
+	fileContent, _, _, err := r.Client.Repositories.GetContents(ctx, owner, repo, path, &github.RepositoryContentGetOptions{Ref: *refAfterDefault})
+	if err != nil {
+		return nil, err
+	}
+	content, err := fileContent.GetContent()
+	return &content, err
 }
 
 func (r LiveConfiguration) GetDevRepos(devEnv string) ([]string, error) {
@@ -101,10 +110,25 @@ func (r LiveConfiguration) GetDefaultChatName() (string, error) {
 	return getSecret("default-chart-name")
 }
 
-func (r LiveConfiguration) GetDownloadUrl(ctx context.Context, owner string, repo string, path string, opts *github.RepositoryContentGetOptions) (string, error) {
-	fileContent, _, _, err := r.Client.Repositories.GetContents(ctx, owner, repo, path, opts)
-	if err != nil {
-		return "", err
+func (r LiveConfiguration) GetDownloadUrl(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
+	var refAfterDefault *string = ref
+	if ref == nil {
+		defaultBranch, err := r.GetDefaultBranch(repo)
+		if err != nil {
+			return nil, err
+		}
+		refAfterDefault = &defaultBranch
 	}
-	return fileContent.GetDownloadURL(), nil
+	fileContent, _, _, err := r.Client.Repositories.GetContents(ctx, owner, repo, path, &github.RepositoryContentGetOptions{Ref: *refAfterDefault})
+	if err != nil {
+		return nil, err
+	}
+	downloadUrl := fileContent.GetDownloadURL()
+	return &downloadUrl, nil
+}
+
+func (r LiveConfiguration) GetDefaultBranch(repo string) (string, error) {
+	ctx := context.Background()
+	rep, _, err := r.Client.Repositories.Get(ctx, r.GetOrg(), repo)
+	return *rep.DefaultBranch, err
 }

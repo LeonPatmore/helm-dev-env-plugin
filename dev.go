@@ -46,7 +46,7 @@ func RunDevInstall(devEnv string, namespace string, tags []string, configuration
 		if err != nil {
 			return err
 		}
-		opts := values.Options{ValueFiles: []string{valueFileUrl, "value files"}}
+		opts := values.Options{ValueFiles: []string{*valueFileUrl, "value files"}}
 
 		var imageTag string
 		if val, ok := tagMap[repo]; ok {

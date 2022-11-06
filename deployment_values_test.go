@@ -9,7 +9,7 @@ import (
 func TestGetDeploymentValuesDownloadUrl(t *testing.T) {
 	values, err := GetDeploymentValuesDownloadUrl("repo", MockConfiguration{})
 	assert.Equal(t, err, nil)
-	assert.Equal(t, values, "some-url")
+	assert.Equal(t, *values, "some-url")
 }
 
 // TODO: Test errors are handled.
