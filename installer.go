@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"helm.sh/helm/v3/pkg/action"
 	"helm.sh/helm/v3/pkg/chart"
@@ -16,11 +15,6 @@ func LoadChart(name string, client *action.Install, configuration Configuration)
 	if err != nil {
 		return nil, err
 	}
-	// if err := actionConfig.Init(cliSettings.RESTClientGetter(), namespace,
-	// 	os.Getenv("HELM_DRIVER"), log.Printf); err != nil {
-	// 	log.Printf("%+v", err)
-	// 	os.Exit(1)
-	// }
 	return configuration.LoadChart(chartLocation)
 }
 
@@ -45,7 +39,7 @@ func (r LocalOptions) WithDefaultValues(imageTag string, releaseName string, ciC
 }
 
 func InstallService(chartName string, releaseName string, namespace string, imageTag string, opts *values.Options, ciConfig CIConfig, configuration Configuration) error {
-	fmt.Printf("Installing chart [ %s ] with release name [ %s ] to namespace [ %s ], tag [ %s ]",  chartName, releaseName, namespace, imageTag)
+	fmt.Printf("Installing chart [ %s ] with release name [ %s ] to namespace [ %s ], tag [ %s ]\n",  chartName, releaseName, namespace, imageTag)
 	client := action.NewInstall(configuration.ActionConfiguration())
 	client.Namespace = namespace
 	client.CreateNamespace = true
@@ -55,15 +49,15 @@ func InstallService(chartName string, releaseName string, namespace string, imag
 	localOptions := &LocalOptions{opts}
 	localOptions.WithDefaultValues(imageTag, releaseName, ciConfig, configuration)
 
-	chartLocator := fmt.Sprintf("%s/%s", chartName, chartName)
-	chart, err := LoadChart(chartLocator, client, configuration)
+	chart, err := LoadChart(chartName, client, configuration)
 
 	if err != nil {
+		fmt.Printf("Failed to load chart [ %s ]\n", chartName)
 		return err
 	}
 
 	p := getter.All(cli.New())
-	optsAsMap, err := opts.MergeValues(p)
+	optsAsMap, err := localOptions.MergeValues(p)
 	if err != nil {
 		return err
 	}
@@ -72,6 +66,6 @@ func InstallService(chartName string, releaseName string, namespace string, imag
 	if err != nil {
 		return err
 	}
-	log.Printf("Installed Chart from path: %s in namespace: %s\n", rel.Name, rel.Namespace)
+	fmt.Printf("Installed Chart from path: %s in namespace: %s\n", rel.Name, rel.Namespace)
 	return nil
 }

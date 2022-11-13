@@ -1,5 +1,7 @@
 setup:
 	go get .
+	helm repo add bitnami https://charts.bitnami.com/bitnami
+	minikube start
 
 uninstall:
 	helm plugin uninstall dev || true

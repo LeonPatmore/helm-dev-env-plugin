@@ -47,7 +47,8 @@ func RunDevInstall(devEnv string, namespace string, tags []string, configuration
 		if err != nil {
 			return err
 		}
-		opts := values.Options{ValueFiles: []string{*valueFileUrl, "value files"}}
+		fmt.Printf("Value file URL is [ %s ]\n", *valueFileUrl)
+		opts := values.Options{ValueFiles: []string{*valueFileUrl}}
 
 		var imageTag string
 		if val, ok := tagMap[repo]; ok {
@@ -56,7 +57,7 @@ func RunDevInstall(devEnv string, namespace string, tags []string, configuration
 			imageTag = "latest"
 		}
 		errr := InstallService(ciConfig.Chart.Name, repo, namespace, imageTag, &opts, *ciConfig, configuration)
-		if err != nil {
+		if errr != nil {
 			return errr
 		}
 	}

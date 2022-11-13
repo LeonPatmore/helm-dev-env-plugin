@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/google/go-github/v47/github"
@@ -98,7 +100,13 @@ func (r LiveConfiguration) Install(install *action.Install, chrt *chart.Chart, v
 }
 
 func (r LiveConfiguration) ActionConfiguration() *action.Configuration {
-	return new(action.Configuration)
+	settings := cli.New()
+	actionConfig := new(action.Configuration)
+	if err := actionConfig.Init(settings.RESTClientGetter(), namespace, os.Getenv("HELM_DRIVER"), log.Printf); err != nil {
+		log.Printf("%+v", err)
+		os.Exit(1)
+	}
+	return actionConfig
 }
 
 func (r LiveConfiguration) SearchRepos(devEnv string) (*github.RepositoriesSearchResult, *github.Response, error) {
