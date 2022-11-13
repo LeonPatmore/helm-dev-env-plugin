@@ -23,7 +23,7 @@ func GetCiYaml(repo string, configuration Configuration) (*CIConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(fileContent)
+	fmt.Println(*fileContent)
 	config := CIConfig{}
 	err = yaml.Unmarshal([]byte(*fileContent), &config)
 	if err != nil {

@@ -38,6 +38,7 @@ func RunDevInstall(devEnv string, namespace string, tags []string, configuration
 		return err
 	}
 	for _, repo := range repos {
+		fmt.Printf("Installing using repo [ %s ]\n", repo)
 		ciConfig, err := GetCiYaml(repo, configuration)
 		if err != nil {
 			return err
