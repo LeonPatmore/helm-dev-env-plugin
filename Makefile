@@ -25,3 +25,6 @@ test:
 
 coverage:
 	go tool cover -html cover.out
+
+lint:
+	golangci-lint run --timeout=3m

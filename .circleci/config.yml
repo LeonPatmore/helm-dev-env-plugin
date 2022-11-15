@@ -10,6 +10,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: lint
+          command: make lint
+      - run:
           name: test style
           command: make test
 workflows:
