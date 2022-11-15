@@ -2,7 +2,7 @@ linters:
   fast: true
   disable-all: true
   enable:
-    - deadcode
+    - unused
     - errcheck
     - goconst
     - gocritic
@@ -16,4 +16,3 @@ linters:
     - unconvert
     - unparam
     - unused
-    - varcheck
