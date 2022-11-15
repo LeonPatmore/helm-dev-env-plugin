@@ -1,5 +1,6 @@
 setup:
 	go get .
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	minikube start
 
