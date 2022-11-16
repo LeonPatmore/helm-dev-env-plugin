@@ -43,12 +43,12 @@ func RunDevInstall(devEnv string, namespace string, tags []string, configuration
 		if err != nil {
 			return err
 		}
-		valueFileUrl, err := GetDeploymentValuesDownloadURL(repo, configuration)
+		valueFileURL, err := GetDeploymentValuesDownloadURL(repo, configuration)
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Value file URL is [ %s ]\n", *valueFileUrl)
-		opts := values.Options{ValueFiles: []string{*valueFileUrl}}
+		fmt.Printf("Value file URL is [ %s ]\n", *valueFileURL)
+		opts := values.Options{ValueFiles: []string{*valueFileURL}}
 
 		var imageTag string
 		if val, ok := tagMap[repo]; ok {

@@ -119,7 +119,7 @@ func (r LiveConfiguration) GetDefaultChatName() (string, error) {
 }
 
 func (r LiveConfiguration) GetDownloadURL(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
-	var refAfterDefault *string = ref
+	var refAfterDefault = ref
 	if ref == nil {
 		defaultBranch, err := r.GetDefaultBranch(repo)
 		if err != nil {
