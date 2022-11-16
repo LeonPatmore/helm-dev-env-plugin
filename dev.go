@@ -43,7 +43,7 @@ func RunDevInstall(devEnv string, namespace string, tags []string, configuration
 		if err != nil {
 			return err
 		}
-		valueFileUrl, err := GetDeploymentValuesDownloadUrl(repo, configuration)
+		valueFileUrl, err := GetDeploymentValuesDownloadURL(repo, configuration)
 		if err != nil {
 			return err
 		}

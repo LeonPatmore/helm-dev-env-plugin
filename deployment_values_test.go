@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetDeploymentValuesDownloadUrl(t *testing.T) {
-	values, err := GetDeploymentValuesDownloadUrl("repo", MockConfiguration{})
+func TestGetDeploymentValuesDownloadURL(t *testing.T) {
+	values, err := GetDeploymentValuesDownloadURL("repo", MockConfiguration{})
 	assert.Equal(t, err, nil)
 	assert.Equal(t, *values, "some-url")
 }

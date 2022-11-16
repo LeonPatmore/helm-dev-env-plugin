@@ -37,7 +37,7 @@ type LiveConfiguration struct {
 }
 
 func (r LiveConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
-	var refAfterDefault *string = ref
+	var refAfterDefault = ref
 	if ref == nil {
 		defaultBranch, err := r.GetDefaultBranch(repo)
 		if err != nil {
@@ -131,8 +131,8 @@ func (r LiveConfiguration) GetDownloadURL(ctx context.Context, owner string, rep
 	if err != nil {
 		return nil, err
 	}
-	downloadUrl := fileContent.GetDownloadURL()
-	return &downloadUrl, nil
+	downloadURL := fileContent.GetDownloadURL()
+	return &downloadURL, nil
 }
 
 func (r LiveConfiguration) GetDefaultBranch(repo string) (string, error) {

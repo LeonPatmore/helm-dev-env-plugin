@@ -22,7 +22,7 @@ type LocalOptions struct {
 	*values.Options
 }
 
-func (r LocalOptions) WithDefaultValues(imageTag string, releaseName string, ciConfig CIConfig, configuration Configuration) error {
+func (r LocalOptions) WithDefaultValues(imageTag string, ciConfig CIConfig, configuration Configuration) error {
 	region, err := configuration.GetRegion()
 	if err != nil {
 		return err
@@ -47,7 +47,7 @@ func InstallService(chartName string, releaseName string, namespace string, imag
 	client.IsUpgrade = true
 
 	localOptions := &LocalOptions{opts}
-	err := localOptions.WithDefaultValues(imageTag, releaseName, ciConfig, configuration)
+	err := localOptions.WithDefaultValues(imageTag, ciConfig, configuration)
 	if err != nil {
 		return err
 	}
