@@ -1,2 +1,3 @@
-- Find a go linter.
+- Find a go linter. DONE
 - Add CI. DONE
+- Move code to package.
