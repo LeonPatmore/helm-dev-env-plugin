@@ -118,7 +118,7 @@ func (r LiveConfiguration) GetDefaultChatName() (string, error) {
 	return getSecret("default-chart-name")
 }
 
-func (r LiveConfiguration) GetDownloadUrl(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
+func (r LiveConfiguration) GetDownloadURL(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
 	var refAfterDefault *string = ref
 	if ref == nil {
 		defaultBranch, err := r.GetDefaultBranch(repo)

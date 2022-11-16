@@ -47,7 +47,10 @@ func InstallService(chartName string, releaseName string, namespace string, imag
 	client.IsUpgrade = true
 
 	localOptions := &LocalOptions{opts}
-	localOptions.WithDefaultValues(imageTag, releaseName, ciConfig, configuration)
+	err := localOptions.WithDefaultValues(imageTag, releaseName, ciConfig, configuration)
+	if err != nil {
+		return err
+	}
 
 	chart, err := LoadChart(chartName, client, configuration)
 

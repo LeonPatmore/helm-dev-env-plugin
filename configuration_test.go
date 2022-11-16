@@ -24,7 +24,7 @@ func (r MockConfiguration) GetContents(ctx context.Context, owner string, repo s
 	return &r.getContentsRes, r.getContentsErr
 }
 
-func (r MockConfiguration) GetDownloadUrl(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
+func (r MockConfiguration) GetDownloadURL(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
 	url := "some-url"
 	return &url, nil
 }

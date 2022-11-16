@@ -46,7 +46,8 @@ func TestLoadChartWhenLocateChartError(t *testing.T) {
 
 func TestWithDefaultValues(t *testing.T) {
 	options := LocalOptions{&values.Options{}}
-	options.WithDefaultValues("some-tag", "release-name", CIConfig{ImageRepo: "some-repo"}, MockConfiguration{})
+	err := options.WithDefaultValues("some-tag", "release-name", CIConfig{ImageRepo: "some-repo"}, MockConfiguration{})
+	assert.Nil(t, err)
 	assert.ElementsMatch(t, []string{
 		"awsRegion=eu-west-1", 
 		"global.awsRegion=eu-west-1", 
