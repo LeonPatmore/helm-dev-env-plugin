@@ -46,22 +46,23 @@ func TestLoadChartWhenLocateChartError(t *testing.T) {
 
 func TestWithDefaultValues(t *testing.T) {
 	options := LocalOptions{&values.Options{}}
-	options.WithDefaultValues("some-tag", "release-name", CIConfig{ImageRepo: "some-repo"}, MockConfiguration{})
+	err := options.WithDefaultValues("some-tag", CIConfig{ImageRepo: "some-repo"}, MockConfiguration{})
+	assert.Nil(t, err)
 	assert.ElementsMatch(t, []string{
-		"awsRegion=eu-west-1", 
-		"global.awsRegion=eu-west-1", 
-		"image.tag=some-tag", 
-		"global.image.tag=some-tag", 
+		"awsRegion=eu-west-1",
+		"global.awsRegion=eu-west-1",
+		"image.tag=some-tag",
+		"global.image.tag=some-tag",
 		"imageRepo=some-repo",
-		}, options.Values)
+	}, options.Values)
 }
 
 func TestInstallService(t *testing.T) {
-	err := InstallService("myChart", "release",  "myNamespace", "myTag", &values.Options{}, CIConfig{}, MockConfiguration{t: t})
+	err := InstallService("myChart", "release", "myNamespace", "myTag", &values.Options{}, CIConfig{}, MockConfiguration{t: t})
 	assert.Equal(t, nil, err)
 }
 
 func TestInstallServiceInstallErr(t *testing.T) {
-	err := InstallService("myChart", "release",  "myNamespace", "myTag", &values.Options{}, CIConfig{}, MockConfiguration{t: t, installErr: errors.New("some error")})
+	err := InstallService("myChart", "release", "myNamespace", "myTag", &values.Options{}, CIConfig{}, MockConfiguration{t: t, installErr: errors.New("some error")})
 	assert.NotNil(t, err)
 }

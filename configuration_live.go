@@ -32,12 +32,12 @@ func GetGithubClient() (*github.Client, error) {
 }
 
 type LiveConfiguration struct {
-	Client github.Client
+	Client    *github.Client
 	GithubOrg string
 }
 
 func (r LiveConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
-	var refAfterDefault *string = ref
+	var refAfterDefault = ref
 	if ref == nil {
 		defaultBranch, err := r.GetDefaultBranch(repo)
 		if err != nil {
@@ -73,7 +73,7 @@ func (r LiveConfiguration) GetDevRepos(devEnv string) ([]string, error) {
 
 func (r LiveConfiguration) GetRegion() (string, error) {
 	session, err := session.NewSession()
-	if err != nil{
+	if err != nil {
 		return "", err
 	}
 	return *session.Config.Region, nil
@@ -88,7 +88,7 @@ func (r LiveConfiguration) LoadChart(location string) (*chart.Chart, error) {
 }
 
 func (r LiveConfiguration) GetOrg() string {
-	return r.GithubOrg 
+	return r.GithubOrg
 }
 
 func (r LiveConfiguration) GetDefaultImageRepo(repo string, ciConfig CIConfig) (string, error) {
@@ -118,8 +118,8 @@ func (r LiveConfiguration) GetDefaultChatName() (string, error) {
 	return getSecret("default-chart-name")
 }
 
-func (r LiveConfiguration) GetDownloadUrl(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
-	var refAfterDefault *string = ref
+func (r LiveConfiguration) GetDownloadURL(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
+	var refAfterDefault = ref
 	if ref == nil {
 		defaultBranch, err := r.GetDefaultBranch(repo)
 		if err != nil {
@@ -131,8 +131,8 @@ func (r LiveConfiguration) GetDownloadUrl(ctx context.Context, owner string, rep
 	if err != nil {
 		return nil, err
 	}
-	downloadUrl := fileContent.GetDownloadURL()
-	return &downloadUrl, nil
+	downloadURL := fileContent.GetDownloadURL()
+	return &downloadURL, nil
 }
 
 func (r LiveConfiguration) GetDefaultBranch(repo string) (string, error) {

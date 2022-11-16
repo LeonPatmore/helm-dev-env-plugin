@@ -11,20 +11,19 @@ import (
 )
 
 type MockConfiguration struct {
-	getContentsRes string
-	getContentsErr error
-	locateChartErr error
+	getContentsRes         string
+	getContentsErr         error
+	locateChartErr         error
 	getDefaultImageRepoErr error
-	installErr error
-	t *testing.T
+	installErr             error
+	t                      *testing.T
 }
-
 
 func (r MockConfiguration) GetContents(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
 	return &r.getContentsRes, r.getContentsErr
 }
 
-func (r MockConfiguration) GetDownloadUrl(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
+func (r MockConfiguration) GetDownloadURL(ctx context.Context, owner string, repo string, path string, ref *string) (*string, error) {
 	url := "some-url"
 	return &url, nil
 }

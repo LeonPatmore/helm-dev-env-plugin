@@ -22,7 +22,7 @@ type LocalOptions struct {
 	*values.Options
 }
 
-func (r LocalOptions) WithDefaultValues(imageTag string, releaseName string, ciConfig CIConfig, configuration Configuration) error {
+func (r LocalOptions) WithDefaultValues(imageTag string, ciConfig CIConfig, configuration Configuration) error {
 	region, err := configuration.GetRegion()
 	if err != nil {
 		return err
@@ -39,7 +39,7 @@ func (r LocalOptions) WithDefaultValues(imageTag string, releaseName string, ciC
 }
 
 func InstallService(chartName string, releaseName string, namespace string, imageTag string, opts *values.Options, ciConfig CIConfig, configuration Configuration) error {
-	fmt.Printf("Installing chart [ %s ] with release name [ %s ] to namespace [ %s ], tag [ %s ]\n",  chartName, releaseName, namespace, imageTag)
+	fmt.Printf("Installing chart [ %s ] with release name [ %s ] to namespace [ %s ], tag [ %s ]\n", chartName, releaseName, namespace, imageTag)
 	client := action.NewInstall(configuration.ActionConfiguration())
 	client.Namespace = namespace
 	client.CreateNamespace = true
@@ -47,7 +47,10 @@ func InstallService(chartName string, releaseName string, namespace string, imag
 	client.IsUpgrade = true
 
 	localOptions := &LocalOptions{opts}
-	localOptions.WithDefaultValues(imageTag, releaseName, ciConfig, configuration)
+	err := localOptions.WithDefaultValues(imageTag, ciConfig, configuration)
+	if err != nil {
+		return err
+	}
 
 	chart, err := LoadChart(chartName, client, configuration)
 

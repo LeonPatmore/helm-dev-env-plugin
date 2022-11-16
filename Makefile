@@ -28,3 +28,6 @@ coverage:
 
 lint:
 	golangci-lint run --timeout=3m
+
+format:
+	gofmt -s -w .

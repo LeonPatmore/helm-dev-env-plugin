@@ -53,7 +53,7 @@ func TestGetCiYamlWithDefaultRepoGetDefaultRepoErr(t *testing.T) {
 	_, err := GetCiYaml("repo", MockConfiguration{getContentsRes: `version: '1.0'
 namespace: mynamespace
 chart:
-    version: 1.0.0`, getDefaultImageRepoErr: errors.New("Some error"),})
+    version: 1.0.0`, getDefaultImageRepoErr: errors.New("Some error")})
 	assert.NotNil(t, err)
 }
 
