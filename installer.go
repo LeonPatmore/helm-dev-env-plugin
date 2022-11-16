@@ -39,7 +39,7 @@ func (r LocalOptions) WithDefaultValues(imageTag string, releaseName string, ciC
 }
 
 func InstallService(chartName string, releaseName string, namespace string, imageTag string, opts *values.Options, ciConfig CIConfig, configuration Configuration) error {
-	fmt.Printf("Installing chart [ %s ] with release name [ %s ] to namespace [ %s ], tag [ %s ]\n",  chartName, releaseName, namespace, imageTag)
+	fmt.Printf("Installing chart [ %s ] with release name [ %s ] to namespace [ %s ], tag [ %s ]\n", chartName, releaseName, namespace, imageTag)
 	client := action.NewInstall(configuration.ActionConfiguration())
 	client.Namespace = namespace
 	client.CreateNamespace = true

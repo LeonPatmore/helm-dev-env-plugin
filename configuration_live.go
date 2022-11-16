@@ -32,7 +32,7 @@ func GetGithubClient() (*github.Client, error) {
 }
 
 type LiveConfiguration struct {
-	Client github.Client
+	Client    *github.Client
 	GithubOrg string
 }
 
@@ -73,7 +73,7 @@ func (r LiveConfiguration) GetDevRepos(devEnv string) ([]string, error) {
 
 func (r LiveConfiguration) GetRegion() (string, error) {
 	session, err := session.NewSession()
-	if err != nil{
+	if err != nil {
 		return "", err
 	}
 	return *session.Config.Region, nil
@@ -88,7 +88,7 @@ func (r LiveConfiguration) LoadChart(location string) (*chart.Chart, error) {
 }
 
 func (r LiveConfiguration) GetOrg() string {
-	return r.GithubOrg 
+	return r.GithubOrg
 }
 
 func (r LiveConfiguration) GetDefaultImageRepo(repo string, ciConfig CIConfig) (string, error) {

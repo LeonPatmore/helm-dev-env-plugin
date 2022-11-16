@@ -13,7 +13,7 @@ var devEnv string
 var tags []string
 
 func initCommands(githubClient *github.Client, org string) (*cobra.Command, error) {
-	config := LiveConfiguration{Client: *githubClient, GithubOrg: org}
+	config := LiveConfiguration{Client: githubClient, GithubOrg: org}
 	var rootCmd = &cobra.Command{
 		Use:   "helm dev",
 		Short: "For creating a dev env",
